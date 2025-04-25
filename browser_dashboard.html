@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Browser Environment Dashboard</title>
+<style>
+body {
+  font-family: sans-serif;
+  background-color: orange; 
+}
+
+#profile {
+  background-color: bisque;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+}
+
+#browserInfo {
+  background-color: bisque;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+#pageInfo {
+  background-color: bisque;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+#navControls {
+  background-color: bisque;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+/* Style for the buttons with different colors */
+#changeTitleButton {
+  background-color: #4CAF50; 
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px; 
+}
+#changeTitleButton:hover{
+    background-color: pink;
+}
+
+
+#reloadButton {
+  background-color: #2196F3; 
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#reloadButton:hover{
+    background-color: pink;
+}
+
+#redirectButton {
+  background-color: #f44336;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px; 
+}
+
+#redirectButton:hover{
+    background-color: pink;
+}
+
+
+#backButton {
+  background-color: #00BCD4; 
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+
+#backButton:hover{
+    background-color: pink;
+}
+
+#forwardButton {
+  background-color: #FFC107;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px; 
+}
+#forwardButton:hover{
+    background-color: pink;
+}
+
+
+/* Style for the color button */
+#changeColorButton {
+  background-color: #008CBA;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px; 
+}
+#changeColorButton:hover{
+    background-color: pink;
+}
+
+</style>
+</head>
+<body>
+
+<div id="profile">
+  <h2>Profile Information</h2>
+  <p><strong>Complete Name:</strong> Mary Joy Perdon  </p>
+  <p><strong>Sex:</strong> Female </p>
+  <p><strong>Address:</strong> Dahat Lagonoy Camarines Sur </p>
+  <p><strong>Course, Year, and Section:</strong>BSIT 2B </p>
+  <p><strong>Name of School:</strong> Partido State University </p>
+  <p><strong>Semester and Academic Year:</strong> 2nd Semester </p>
+  <p><strong>Subject Code and Title:</strong> PF2 - Event Driven Programming   </p>
+  <p><strong>Name of Subject Instructor:</strong> RJ Abio  </p>
+</div>
+
+<div id="browserInfo">
+  <h2>Browser Information</h2>
+  <p><strong>Browser Name and Version:</strong> <span id="browserName"></span></p>
+  <p><strong>Platform (OS):</strong> <span id="platform"></span></p>
+  <p><strong>Java Enabled:</strong> <span id="javaEnabled"></span></p>
+  <p><strong>Screen Resolution:</strong> <span id="screenResolution"></span></p>
+  <p><strong>Available Screen Size:</strong> <span id="availableScreenSize"></span></p>
+  <p><strong>Color Depth:</strong> <span id="colorDepth"></span></p>
+</div>
+
+<div id="pageInfo">
+  <h2>Page Information and Controls</h2>
+  <p><strong>Current URL:</strong> <span id="currentURL"></span></p>
+  <p><strong>Hostname:</strong> <span id="hostname"></span></p>
+  <p><strong>Page Title:</strong> <span id="pageTitle"></span></p>
+  <button id="changeTitleButton">Change Title</button>
+</div>
+
+<div id="navControls">
+  <h2>Navigation Controls</h2>
+  <button id="reloadButton">Reload</button>
+  <button id="redirectButton">Redirect</button>
+  <button id="backButton">Back</button>
+  <button id="forwardButton">Forward</button>
+</div>
+
+<button id="changeColorButton">Change Background Color</button>
+
+<script>
+  // Part A: Browser Information
+  document.getElementById("browserName").textContent = navigator.userAgent;
+  document.getElementById("platform").textContent = navigator.platform;
+  document.getElementById("javaEnabled").textContent = navigator.javaEnabled();
+  document.getElementById("screenResolution").textContent = screen.width + " x " + screen.height;
+  document.getElementById("availableScreenSize").textContent = screen.availWidth + " x " + screen.availHeight;
+  document.getElementById("colorDepth").textContent = screen.colorDepth;
+
+  // Part B: Page Information and Controls
+  document.getElementById("currentURL").textContent = window.location.href;
+  document.getElementById("hostname").textContent = window.location.hostname;
+  document.getElementById("pageTitle").textContent = document.title;
+
+  document.getElementById("changeTitleButton").addEventListener("click", function() {
+    let newTitle = prompt("Enter a new title for the page:");
+    if (newTitle) {
+      document.title = newTitle;
+      document.getElementById("pageTitle").textContent = newTitle;
+    }
+  });
+
+  // Part C: Navigation Controls
+  document.getElementById("reloadButton").addEventListener("click", function() {
+    location.reload();
+  });
+
+  document.getElementById("redirectButton").addEventListener("click", function() {
+    location.href = "https://www.example.com";
+  });
+
+  document.getElementById("backButton").addEventListener("click", function() {
+    history.back();
+  });
+
+  document.getElementById("forwardButton").addEventListener("click", function() {
+    history.forward();
+  });
+
+  // Part D: Dynamic Styling with Screen Info
+  function setBackgroundColor() {
+    let screenWidth = window.innerWidth;
+    if (screenWidth < 600) {
+      document.body.style.backgroundColor = "violet";
+    } else if (screenWidth >= 600 && screenWidth <= 991) {
+      document.body.style.backgroundColor = "blue";
+    } else {
+      document.body.style.backgroundColor = "red";
+    }
+  }
+
+  setBackgroundColor();
+
+  window.addEventListener("resize", setBackgroundColor);
+
+  let colors = ["orange", "green", "blue", "red", "purple", "yellow"];
+  let currentColorIndex = 0;
+  document.getElementById("changeColorButton").addEventListener("click", function() {
+    document.body.style.backgroundColor = colors[currentColorIndex];
+    currentColorIndex = (currentColorIndex + 1) % colors.length;
+  });
+</script>
+
+</body>
+</html>

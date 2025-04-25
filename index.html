@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Homepage</title>
+<style>
+body {
+  font-family: sans-serif;
+  margin: 20px;
+  background-color: aqua;
+}
+
+#profile {
+  background-color: bisque;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+}
+
+#activityLinks {
+  margin-top: 20px;
+}
+
+#activityLinks a {
+  display: block;
+  padding: 10px;
+  margin-bottom: 5px;
+  background-color: yellow;
+  text-decoration: none;
+  color: grey;
+  border: 1px solid lightseagreen; /* Add border to the links */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+#activityLinks a:hover {
+  background-color: pink;
+}
+
+</style>
+</head>
+<body>
+
+<div id="profile">
+  <h2>Student Profile</h2>
+  <p><strong>Complete Name:</strong> Mary Joy Perdon </p>
+  <p><strong>Sex:</strong> Female</p>
+  <p><strong>Address:</strong> Dahat Lagonoy Camarines Sur</p>
+  <p><strong>Course, Year, and Section:</strong> BSIT 2B</p>
+  <p><strong>Name of School:</strong> Partido State University </p>
+  <p><strong>Semester and Academic Year:</strong> 2nd Semester </p>
+  <p><strong>Course Code and Title:</strong> PF2 - Event Driven Programming </p>
+  <p><strong>Name of Subject Instructor:</strong> RJ Abio</p>
+</div>
+
+<div id="activityLinks">
+  <h2>Activity Links</h2>
+  <a href="https://joyjoy25522.github.io/Guess-The-Word-Game/" target="_blank">Guess the Secret Word Game</a>
+  <a href="browser_dashboard.html" target="_blank">Browser Environment Dashboard</a>
+</div>
+
+<script>
+  // Add interactivity to the links
+  let links = document.querySelectorAll("#activityLinks a");
+  let colors = ["#4CAF50", "#2196F3", "#f44336", "#00BCD4", "#FFC107"];
+  let currentColorIndex = 0;
+
+  links.forEach(link => {
+    link.addEventListener("click", function() {
+      // Change the background color of the link when clicked
+      link.style.backgroundColor = colors[currentColorIndex];
+      currentColorIndex = (currentColorIndex + 1) % colors.length;
+    });
+  });
+</script>
+
+</body>
+</html>
