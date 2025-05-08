@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DOM Traversal App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+      background: #f5f8fa;
+      color: #333;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    header h2 {
+      margin-top: 0;
+    }
+
+    .tree {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      margin: 20px 0;
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 20px;
+    }
+
+    li {
+      cursor: pointer;
+      padding: 8px 12px;
+      margin-bottom: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    li:hover {
+      transform: scale(1.02);
+    }
+
+    li.grandparent {
+      background-color: #ffe0b2;
+    }
+
+    li.parent {
+      background-color: #c8e6c9;
+    }
+
+    li.child {
+      background-color: #bbdefb;
+    }
+
+    li.selected,
+    li.highlight {
+      background-color: #007bff !important;
+      color: white;
+    }
+
+    .controls {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .controls button {
+      margin: 8px;
+      padding: 12px 18px;
+      border: none;
+      background: linear-gradient(45deg, #007bff, #00c6ff);
+      color: white;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .controls button:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(45deg, #0056b3, #00a0e3);
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h2>Profile Information</h2>
+    <p><strong>Complete Name:</strong> John Doe</p>
+    <p><strong>Sex:</strong> Male</p>
+    <p><strong>Address:</strong> 123 Sample Street, City, Country</p>
+    <p><strong>Course, Year, and Section:</strong> BS Computer Science, 3rd Year, Section A</p>
+    <p><strong>Name of School:</strong> Sample University</p>
+    <p><strong>Semester and Academic Year:</strong> 2nd Semester, AY 2024–2025</p>
+    <p><strong>Subject Code and Title:</strong> CS301 - Web Development</p>
+    <p><strong>Name of Subject Instructor:</strong> Prof. Jane Smith</p>
+  </header>
+
+  <h1>Interactive DOM Traversal Tree</h1>
+
+  <div class="tree">
+    <ul id="grandparent">
+      <li class="grandparent" draggable="true">
+        Grandparent
+        <ul>
+          <li class="parent" draggable="true">
+            Parent 1
+            <ul>
+              <li class="child" draggable="true">Child 1.1</li>
+              <li class="child" draggable="true">Child 1.2</li>
+            </ul>
+          </li>
+          <li class="parent" draggable="true">
+            Parent 2
+            <ul>
+              <li class="child" draggable="true">Child 2.1</li>
+              <li class="child" draggable="true">Child 2.2</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="controls">
+    <button onclick="selectFirstChild()">First Child</button>
+    <button onclick="selectParent()">Parent</button>
+    <button onclick="selectNextSibling()">Next Sibling</button>
+    <button onclick="selectPreviousSibling()">Previous Sibling</button>
+    <button onclick="addChild()">Add Child</button>
+    <button onclick="deleteNode()">Delete Node</button>
+  </div>
+
+  <script>
+    let selectedNode = document.querySelector("#grandparent > li");
+    highlight(selectedNode);
+
+    function highlight(node) {
+      document.querySelectorAll('li').forEach(el => el.classList.remove('selected'));
+      if (node) {
+        node.classList.add('selected');
+        selectedNode = node;
+        localStorage.setItem('selectedPath', getNodePath(node));
+      }
+    }
+
+    function selectFirstChild() {
+      const child = selectedNode.querySelector("ul > li");
+      if (child) highlight(child);
+      else alert("No child node.");
+    }
+
+    function selectParent() {
+      const parent = selectedNode.parentElement.closest("li");
+      if (parent) highlight(parent);
+      else alert("No parent node.");
+    }
+
+    function selectNextSibling() {
+      let sibling = selectedNode.nextElementSibling;
+      if (sibling) highlight(sibling);
+      else alert("No next sibling.");
+    }
+
+    function selectPreviousSibling() {
+      let sibling = selectedNode.previousElementSibling;
+      if (sibling) highlight(sibling);
+      else alert("No previous sibling.");
+    }
+
+    function addChild() {
+      if (selectedNode.classList.contains('grandparent')) {
+        const newParent = document.createElement('li');
+        newParent.className = 'parent';
+        newParent.textContent = `Parent ${selectedNode.querySelectorAll(':scope > ul > li.parent').length + 1}`;
+
+        const newUl = document.createElement('ul');
+        for (let i = 1; i <= 2; i++) {
+          const child = document.createElement('li');
+          child.className = 'child';
+          child.textContent = `Child ${i}`;
+          child.setAttribute('draggable', 'true');
+          child.addEventListener('click', e => {
+            e.stopPropagation();
+            highlight(child);
+          });
+          newUl.appendChild(child);
+        }
+        newParent.appendChild(newUl);
+        newParent.setAttribute('draggable', 'true');
+        newParent.addEventListener('click', e => {
+          e.stopPropagation();
+          highlight(newParent);
+        });
+        let parentList = selectedNode.querySelector('ul') || selectedNode.appendChild(document.createElement('ul'));
+        parentList.appendChild(newParent);
+
+      } else if (selectedNode.classList.contains('parent')) {
+        let ul = selectedNode.querySelector("ul");
+        if (!ul) {
+          ul = document.createElement("ul");
+          selectedNode.appendChild(ul);
+        }
+
+        const newLi = document.createElement("li");
+        newLi.textContent = `Child ${ul.children.length + 1}`;
+        newLi.className = 'child';
+        newLi.setAttribute("draggable", "true");
+        newLi.addEventListener('click', e => {
+          e.stopPropagation();
+          highlight(newLi);
+        });
+        ul.appendChild(newLi);
+
+      } else if (selectedNode.classList.contains('child')) {
+        alert("Cannot add child to a child node.");
+      }
+    }
+
+    function deleteNode() {
+      if (!selectedNode.parentElement.closest("li")) {
+        alert("Cannot delete grandparent node.");
+        return;
+      }
+
+      const nextSelect = selectedNode.nextElementSibling || selectedNode.previousElementSibling || selectedNode.parentElement.closest("li");
+      const toRemove = selectedNode;
+      highlight(nextSelect);
+      toRemove.remove();
+    }
+
+    document.querySelectorAll('li').forEach(li => {
+      li.addEventListener('click', e => {
+        e.stopPropagation();
+        highlight(li);
+      });
+    });
+
+    let dragged;
+    document.addEventListener("dragstart", e => {
+      if (e.target.tagName === "LI") dragged = e.target;
+    });
+
+    document.addEventListener("dragover", e => {
+      if (e.target.tagName === "LI") e.preventDefault();
+    });
+
+    document.addEventListener("drop", e => {
+      if (e.target.tagName === "LI") {
+        e.preventDefault();
+        const ul = e.target.querySelector("ul") || (() => {
+          const newUl = document.createElement("ul");
+          e.target.appendChild(newUl);
+          return newUl;
+        })();
+        ul.appendChild(dragged);
+      }
+    });
+
+    function getNodePath(node) {
+      const path = [];
+      while (node && node.tagName === "LI") {
+        let index = 0;
+        let sibling = node;
+        while ((sibling = sibling.previousElementSibling) != null) index++;
+        path.unshift(index);
+        node = node.parentElement.closest("li");
+      }
+      return path.join("-");
+    }
+
+    function getNodeByPath(path) {
+      const indices = path.split("-").map(Number);
+      let node = document.querySelector("#grandparent > li");
+      for (let i = 0; i < indices.length; i++) {
+        node = node.querySelectorAll(":scope > ul > li")[indices[i]];
+        if (!node) break;
+      }
+      return node;
+    }
+
+    window.addEventListener("load", () => {
+      const path = localStorage.getItem("selectedPath");
+      if (path) {
+        const node = getNodeByPath(path);
+        if (node) highlight(node);
+      }
+    });
+  </script>
+
+</body>
+</html>
